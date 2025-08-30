@@ -1,0 +1,2 @@
+# MANJO-GPT-HACK
+ИИ 
