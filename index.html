@@ -395,97 +395,82 @@
             color: #e2e8f0;
         }
         
-        /* API Key Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 100;
-            left: 0;
-            top: 0;
+        /* API Key Settings */
+        .api-key-input {
             width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(3px);
-        }
-        
-        .modal-content {
-            background: linear-gradient(135deg, #0f172a, #7f1d1d);
-            margin: 15% auto;
-            padding: 2rem;
-            border: 1px solid rgba(220, 38, 38, 0.5);
-            border-radius: 0.75rem;
-            width: 90%;
-            max-width: 500px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
-        }
-        
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-        }
-        
-        .modal-title {
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: #f87171;
-        }
-        
-        .close {
-            color: #aaa;
-            font-size: 1.5rem;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        
-        .close:hover {
-            color: #f87171;
-        }
-        
-        .modal-body {
-            margin-bottom: 1.5rem;
-        }
-        
-        .modal-input {
-            width: 100%;
-            padding: 0.75rem;
+            padding: 0.5rem;
             background: rgba(30, 41, 59, 0.7);
             border: 1px solid rgba(220, 38, 38, 0.3);
             border-radius: 0.5rem;
             color: #f1f5f9;
             font-size: 0.875rem;
+            margin-bottom: 0.5rem;
         }
         
-        .modal-input:focus {
+        .api-key-input:focus {
             outline: none;
             border-color: #dc2626;
             box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.2);
         }
         
-        .modal-footer {
+        .api-key-actions {
             display: flex;
-            justify-content: space-between;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
         }
         
-        .btn-secondary {
+        .api-key-btn {
+            flex: 1;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            border: none;
+            cursor: pointer;
+            font-size: 0.875rem;
+            transition: all 0.2s;
+        }
+        
+        .save-key-btn {
+            background: linear-gradient(to right, #dc2626, #b91c1c);
+            color: white;
+        }
+        
+        .save-key-btn:hover {
+            background: linear-gradient(to right, #b91c1c, #991b1b);
+        }
+        
+        .clear-key-btn {
             background: #334155;
             color: #e2e8f0;
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 0.5rem;
-            cursor: pointer;
-            transition: background 0.2s;
         }
         
-        .btn-secondary:hover {
+        .clear-key-btn:hover {
             background: #475569;
         }
         
+        .api-key-status {
+            font-size: 0.75rem;
+            margin-top: 0.5rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            text-align: center;
+        }
+        
+        .status-connected {
+            background: rgba(34, 197, 94, 0.2);
+            color: #4ade80;
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+        
+        .status-disconnected {
+            background: rgba(239, 68, 68, 0.2);
+            color: #f87171;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+        
         .api-key-info {
-            font-size: 0.875rem;
+            font-size: 0.75rem;
             color: #94a3b8;
-            margin-top: 1rem;
+            margin-top: 0.5rem;
         }
         
         .api-key-link {
@@ -499,31 +484,6 @@
     </style>
 </head>
 <body class="flex">
-    <!-- API Key Modal -->
-    <div id="apiKeyModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title">Введите API ключ</h2>
-                <span class="close">&times;</span>
-            </div>
-            <div class="modal-body">
-                <p class="mb-4">Для использования MANJO GPT HACK необходимо ввести API ключ от OpenRouter.</p>
-                <input type="password" id="apiKeyInput" class="modal-input" placeholder="sk-or-..." autocomplete="off">
-                <div class="flex items-center mt-3">
-                    <input type="checkbox" id="saveKeyCheckbox" class="mr-2">
-                    <label for="saveKeyCheckbox" class="text-sm">Сохранить ключ в браузере</label>
-                </div>
-                <div class="api-key-info">
-                    <p>Получите ключ на <a href="https://openrouter.ai/keys" target="_blank" class="api-key-link">openrouter.ai/keys</a></p>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button id="cancelKeyBtn" class="btn-secondary">Отмена</button>
-                <button id="saveKeyBtn" class="btn-primary bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 px-4 py-2 rounded-lg">Сохранить</button>
-            </div>
-        </div>
-    </div>
-
     <!-- Mobile menu button -->
     <button id="mobileMenuBtn" class="mobile-menu-btn">
         <i class="fas fa-bars"></i>
@@ -566,6 +526,25 @@
             <!-- Settings Panel -->
             <div id="settingsPanel" class="flex-1 p-4 overflow-y-auto">
                 <div class="space-y-5">
+                    <!-- API Key Settings -->
+                    <div>
+                        <h3 class="text-base font-semibold mb-3 text-red-200">API Key Settings</h3>
+                        <div class="bg-gray-800 bg-opacity-50 p-3 rounded-lg">
+                            <label class="block text-xs font-medium text-gray-300 mb-1">OpenRouter API Key:</label>
+                            <input type="password" id="apiKeyInput" class="api-key-input" placeholder="sk-or-..." autocomplete="off">
+                            <div class="api-key-actions">
+                                <button id="saveKeyBtn" class="api-key-btn save-key-btn">Save Key</button>
+                                <button id="clearKeyBtn" class="api-key-btn clear-key-btn">Clear</button>
+                            </div>
+                            <div id="apiKeyStatus" class="api-key-status status-disconnected">
+                                Status: Disconnected
+                            </div>
+                            <div class="api-key-info">
+                                <p>Get key at <a href="https://openrouter.ai/keys" target="_blank" class="api-key-link">openrouter.ai/keys</a></p>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Скрытый системный промт -->
                     <div class="system-prompt-section">
                         <h3 class="text-base font-semibold mb-3 text-red-200">System Prompt</h3>
@@ -602,10 +581,6 @@
                                 <div class="flex justify-between mb-1">
                                     <span class="text-gray-300">Provider:</span>
                                     <span class="text-red-300">MANJO AI</span>
-                                </div>
-                                <div id="apiStatus" class="flex justify-between">
-                                    <span class="text-gray-300">Status:</span>
-                                    <span class="text-green-400">Connected</span>
                                 </div>
                             </div>
                         </div>
@@ -714,7 +689,7 @@
 
         // DOM Elements
         let themeToggle, newChatBtn, messageInput, sendButton, messagesContainer, darkModeToggle, chatList, chatTitle, mobileMenuBtn, sidebar, overlay;
-        let apiKeyModal, apiKeyInput, saveKeyBtn, cancelKeyBtn, saveKeyCheckbox, closeBtn;
+        let apiKeyInput, saveKeyBtn, clearKeyBtn, apiKeyStatus;
 
         // Initialize the app
         function init() {
@@ -731,22 +706,19 @@
             sidebar = document.getElementById('sidebar');
             overlay = document.getElementById('overlay');
             
-            // Get modal elements
-            apiKeyModal = document.getElementById('apiKeyModal');
+            // Get API key elements
             apiKeyInput = document.getElementById('apiKeyInput');
             saveKeyBtn = document.getElementById('saveKeyBtn');
-            cancelKeyBtn = document.getElementById('cancelKeyBtn');
-            saveKeyCheckbox = document.getElementById('saveKeyCheckbox');
-            closeBtn = document.querySelector('.close');
+            clearKeyBtn = document.getElementById('clearKeyBtn');
+            apiKeyStatus = document.getElementById('apiKeyStatus');
 
             // Try to load API key from localStorage
             const savedApiKey = localStorage.getItem('manjoGptApiKey');
             if (savedApiKey) {
                 apiKey = savedApiKey;
-                document.getElementById('apiStatus').innerHTML = '<span class="text-gray-300">Status:</span> <span class="text-green-400">Connected</span>';
-            } else {
-                // Show API key modal if no key is saved
-                showApiKeyModal();
+                apiKeyInput.value = savedApiKey;
+                apiKeyStatus.className = 'api-key-status status-connected';
+                apiKeyStatus.innerHTML = 'Status: Connected';
             }
 
             // Load data from localStorage
@@ -785,36 +757,6 @@
             updateMessagesDisplay();
             setupEventListeners();
             updateTheme();
-        }
-
-        // Show API key modal
-        function showApiKeyModal() {
-            apiKeyModal.style.display = 'block';
-            apiKeyInput.focus();
-        }
-
-        // Hide API key modal
-        function hideApiKeyModal() {
-            apiKeyModal.style.display = 'none';
-        }
-
-        // Save API key
-        function saveApiKey() {
-            const key = apiKeyInput.value.trim();
-            if (!key) {
-                alert('Пожалуйста, введите API ключ');
-                return;
-            }
-            
-            apiKey = key;
-            
-            // Save to localStorage if checkbox is checked
-            if (saveKeyCheckbox.checked) {
-                localStorage.setItem('manjoGptApiKey', key);
-            }
-            
-            hideApiKeyModal();
-            document.getElementById('apiStatus').innerHTML = '<span class="text-gray-300">Status:</span> <span class="text-green-400">Connected</span>';
         }
 
         // Setup event listeners
@@ -904,24 +846,48 @@
                 }
             });
             
-            // Modal event listeners
+            // API Key event listeners
             saveKeyBtn.addEventListener('click', saveApiKey);
-            cancelKeyBtn.addEventListener('click', hideApiKeyModal);
-            closeBtn.addEventListener('click', hideApiKeyModal);
+            clearKeyBtn.addEventListener('click', clearApiKey);
             
-            // Close modal when clicking outside
-            window.addEventListener('click', function(event) {
-                if (event.target === apiKeyModal) {
-                    hideApiKeyModal();
-                }
-            });
-            
-            // Allow Enter key in modal
+            // Allow Enter key in API key input
             apiKeyInput.addEventListener('keypress', function(e) {
                 if (e.key === 'Enter') {
                     saveApiKey();
                 }
             });
+        }
+
+        // Save API key
+        function saveApiKey() {
+            const key = apiKeyInput.value.trim();
+            if (!key) {
+                alert('Пожалуйста, введите API ключ');
+                return;
+            }
+            
+            apiKey = key;
+            localStorage.setItem('manjoGptApiKey', key);
+            
+            apiKeyStatus.className = 'api-key-status status-connected';
+            apiKeyStatus.innerHTML = 'Status: Connected';
+            
+            // Show success message
+            const originalText = apiKeyStatus.innerHTML;
+            apiKeyStatus.innerHTML = 'Key saved successfully!';
+            setTimeout(() => {
+                apiKeyStatus.innerHTML = originalText;
+            }, 2000);
+        }
+
+        // Clear API key
+        function clearApiKey() {
+            apiKeyInput.value = '';
+            apiKey = null;
+            localStorage.removeItem('manjoGptApiKey');
+            
+            apiKeyStatus.className = 'api-key-status status-disconnected';
+            apiKeyStatus.innerHTML = 'Status: Disconnected';
         }
 
         // Apply formatting to text
@@ -1320,7 +1286,7 @@
 
             // Check if API key is available
             if (!apiKey) {
-                showApiKeyModal();
+                alert('Пожалуйста, добавьте API ключ в настройках!');
                 return;
             }
 
